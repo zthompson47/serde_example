@@ -101,3 +101,21 @@ impl<'de> serde::Deserialize<'de> for Bar {
         deserializer.deserialize_struct("Bar", &["a", "b"], BarVisitor)
     }
 }
+
+#[test]
+fn test_bar() {
+    let bar = Bar {
+        a: 42,
+        b: "qwerty".into(),
+    };
+
+    let bar_ser = crate::to_string(&bar).unwrap();
+
+    assert_eq!(
+        bar_ser,
+        r#"{"a":42,"b":"qwerty"}"#
+    );
+
+    let bar_de = crate::from_str(&bar_ser).unwrap();
+    assert_eq!(bar, bar_de);
+}

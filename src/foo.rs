@@ -115,3 +115,24 @@ impl<'de> serde::Deserialize<'de> for Foo {
         deserializer.deserialize_struct("Foo", &["a", "b", "c"], FooVisitor)
     }
 }
+
+#[test]
+fn test_foo() {
+    let f = Foo {
+        a: 47,
+        b: vec![1, 22, 333],
+        c: Bar {
+            a: 42,
+            b: "qwerty".into(),
+        },
+    };
+
+    let f_ser = crate::to_string(&f).unwrap();
+    assert_eq!(
+        f_ser,
+        r#"{"a":47,"b":[1,22,333],"c":{"a":42,"b":"qwerty"}}"#
+    );
+
+    let f_de = crate::from_str(&f_ser).unwrap();
+    assert_eq!(f, f_de);
+}
