@@ -45,7 +45,6 @@ impl<'de> Visitor<'de> for FooFieldVisitor {
             "a" => Ok(FooField::A),
             "b" => Ok(FooField::B),
             "c" => Ok(FooField::C),
-            //_ => Ok(FooField::Ignore),
             unknown => Err(serde::de::Error::unknown_field(unknown, &["a", "b", "c"])),
         }
     }

@@ -1,10 +1,10 @@
 use std::ops::{AddAssign, MulAssign, Neg};
 
-use serde::Deserialize;
 use serde::de::{
-    self, DeserializeSeed, EnumAccess, IntoDeserializer, MapAccess, SeqAccess,
-    VariantAccess, Visitor,
+    self, DeserializeSeed, EnumAccess, IntoDeserializer, MapAccess, SeqAccess, VariantAccess,
+    Visitor,
 };
+use serde::Deserialize;
 
 use crate::error::{Error, Result};
 
@@ -323,11 +323,7 @@ impl<'de, 'a> de::Deserializer<'de> for &'a mut Deserializer<'de> {
     }
 
     // Unit struct means a named value containing no data.
-    fn deserialize_unit_struct<V>(
-        self,
-        _name: &'static str,
-        visitor: V,
-    ) -> Result<V::Value>
+    fn deserialize_unit_struct<V>(self, _name: &'static str, visitor: V) -> Result<V::Value>
     where
         V: Visitor<'de>,
     {
@@ -337,11 +333,7 @@ impl<'de, 'a> de::Deserializer<'de> for &'a mut Deserializer<'de> {
     // As is done here, serializers are encouraged to treat newtype structs as
     // insignificant wrappers around the data they contain. That means not
     // parsing anything other than the contained value.
-    fn deserialize_newtype_struct<V>(
-        self,
-        _name: &'static str,
-        visitor: V,
-    ) -> Result<V::Value>
+    fn deserialize_newtype_struct<V>(self, _name: &'static str, visitor: V) -> Result<V::Value>
     where
         V: Visitor<'de>,
     {
@@ -502,10 +494,7 @@ struct CommaSeparated<'a, 'de: 'a> {
 
 impl<'a, 'de> CommaSeparated<'a, 'de> {
     fn new(de: &'a mut Deserializer<'de>) -> Self {
-        CommaSeparated {
-            de,
-            first: true,
-        }
+        CommaSeparated { de, first: true }
     }
 }
 
@@ -636,11 +625,7 @@ impl<'de, 'a> VariantAccess<'de> for Enum<'a, 'de> {
 
     // Struct variants are represented in JSON as `{ NAME: { K: V, ... } }` so
     // deserialize the inner map here.
-    fn struct_variant<V>(
-        self,
-        _fields: &'static [&'static str],
-        visitor: V,
-    ) -> Result<V::Value>
+    fn struct_variant<V>(self, _fields: &'static [&'static str], visitor: V) -> Result<V::Value>
     where
         V: Visitor<'de>,
     {
